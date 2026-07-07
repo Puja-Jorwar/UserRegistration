@@ -1,0 +1,7 @@
+# Database Configuration
+# Copy this file to db.properties and fill in your actual credentials.
+# DO NOT commit db.properties to GitHub.
+
+db.url=jdbc:postgresql://localhost:5432/registration
+db.user=YOUR_DB_USERNAME
+db.password=YOUR_DB_PASSWORD
