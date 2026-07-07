@@ -32,10 +32,10 @@ public class Register extends HttpServlet {
 			props.load(input);
 			String url = props.getProperty("db.url");
 			String user = props.getProperty("db.user");
-			String password = props.getProperty("db.password");
+			String dbPass = props.getProperty("db.password");
 
 			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(url, user, password);
+			connection = DriverManager.getConnection(url, user, dbPass);
 
 			PreparedStatement preparedStatement = connection.prepareStatement("insert into customer values(?,?)");
 
@@ -49,17 +49,14 @@ public class Register extends HttpServlet {
 			dispacher.forward(req, resp);
 			System.out.println("Request Forwarded...!");
 
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException | SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
 			if (connection != null) {
-
 				try {
 					connection.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
 				}
 			}
 		}

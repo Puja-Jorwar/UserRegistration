@@ -51,11 +51,7 @@ public class ForgetPassword extends HttpServlet {
 
 				}
 
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-
+			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
 				try {

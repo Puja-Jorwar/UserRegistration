@@ -31,10 +31,10 @@ public class Login extends HttpServlet {
 			props.load(input);
 			String url = props.getProperty("db.url");
 			String user = props.getProperty("db.user");
-			String password = props.getProperty("db.password");
+			String dbPass = props.getProperty("db.password");
 
 			Class.forName("org.postgresql.Driver");
-			Connection connection = DriverManager.getConnection(url, user, password);
+			Connection connection = DriverManager.getConnection(url, user, dbPass);
 
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("select * from customer where username=? and password=?");
