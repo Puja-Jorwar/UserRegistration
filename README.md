@@ -1,11 +1,20 @@
-# UserRegistration - Java Servlet Web App
+# 🖥️ UserRegistration — Java Servlet & JSP Web App
 
-A full-stack Java web application built using **Java Servlets**, **JSP**, **PostgreSQL**, and **Apache Tomcat 9.0**, covering the complete user authentication flow:
+A full-stack **Java Servlet + JSP** web application with complete user authentication flow, built using **Apache Tomcat 9.0** and **PostgreSQL**.
 
-- ✅ User Registration
-- ✅ User Login with Session Management
-- ✅ Forgot Password (Reset via username)
-- ✅ Customer Home Page (after login)
+> 📚 Part of the **"Code with Puja" DevLog Series** — documenting my Java backend learning journey step by step.
+> 👉 [Read the Blog Series](https://pujajorwar.hashnode.dev)
+
+---
+
+## ✨ Features
+
+- 📝 **User Registration** — New users can register with a username and password
+- 🔐 **User Login** — Credentials verified against PostgreSQL database
+- 🏠 **Customer Home Page** — Personalized welcome page after successful login
+- 🔑 **Forgot Password** — Users can reset their password using their username
+- ⚡ **Session Management** — HttpSession used to track logged-in users
+- 🛡️ **Secure DB Config** — No hardcoded credentials (uses `db.properties` file)
 
 ---
 
@@ -13,11 +22,12 @@ A full-stack Java web application built using **Java Servlets**, **JSP**, **Post
 
 | Layer | Technology |
 |:---|:---|
-| Backend | Java Servlets (javax.servlet) |
-| Frontend | JSP (Java Server Pages) |
+| Backend | Java Servlets (`javax.servlet`) |
+| View Layer | JSP (Java Server Pages) |
 | Database | PostgreSQL |
 | Build Tool | Maven |
 | Server | Apache Tomcat 9.0 |
+| Language | Java 8 |
 
 ---
 
@@ -28,18 +38,20 @@ UserRegistration/
 ├── src/
 │   └── main/
 │       ├── java/com/java/register/
-│       │   ├── Register.java         # Handles user registration
-│       │   ├── Login.java            # Handles login & session
-│       │   └── ForgetPassword.java   # Handles password reset
+│       │   ├── Register.java           # Servlet: handles new user registration
+│       │   ├── Login.java              # Servlet: validates login, sets session
+│       │   └── ForgetPassword.java     # Servlet: updates password in DB
 │       ├── resources/
-│       │   └── db.properties.example # Template for DB credentials
+│       │   └── db.properties.example   # Template for DB config (safe to commit)
 │       └── webapp/
-│           ├── register.jsp          # Registration form
-│           ├── login.jsp             # Login form
-│           ├── ForgetPassword.jsp    # Forgot password form
-│           ├── customer.jsp          # Post-registration page
-│           └── customerhome.jsp      # Dashboard after login
-├── pom.xml
+│           ├── register.jsp            # Registration form (JSP)
+│           ├── login.jsp               # Login form with session message (JSP)
+│           ├── ForgetPassword.jsp      # Forgot password form (JSP)
+│           ├── customer.jsp            # Post-registration success page
+│           ├── customerhome.jsp        # Dashboard after login
+│           └── index.jsp               # Entry point (redirects to login)
+├── pom.xml                             # Maven dependencies
+├── README.md
 └── .gitignore
 ```
 
@@ -49,12 +61,11 @@ UserRegistration/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/pujajorwar/UserRegistration.git
+git clone https://github.com/Puja-Jorwar/UserRegistration.git
 cd UserRegistration
 ```
 
-### 2. Set Up the Database
-Create a PostgreSQL database and table:
+### 2. Set Up the PostgreSQL Database
 ```sql
 CREATE DATABASE registration;
 
@@ -68,40 +79,71 @@ CREATE TABLE customer (
 
 ### 3. Configure DB Credentials
 ```bash
-# Copy the example file
+# Copy the example config file
 cp src/main/resources/db.properties.example src/main/resources/db.properties
+```
 
-# Edit db.properties with your actual credentials
+Then open `db.properties` and fill in your details:
+```properties
 db.url=jdbc:postgresql://localhost:5432/registration
 db.user=your_postgres_username
 db.password=your_postgres_password
 ```
 
-> ⚠️ **IMPORTANT**: `db.properties` is listed in `.gitignore` and will NOT be committed to GitHub. Never commit your real credentials.
+> ⚠️ **`db.properties` is gitignored and will never be committed. Keep your credentials safe.**
 
-### 4. Build and Deploy
+### 4. Build the Project
 ```bash
 mvn clean package
-# Copy the generated .war file from target/ to your Tomcat webapps/ directory
 ```
 
-### 5. Access the App
-Open your browser and go to:
+### 5. Deploy to Tomcat
+- Copy the generated `target/UserRegistration.war` file to your Tomcat `webapps/` directory.
+- Start Tomcat.
+
+### 6. Open in Browser
 ```
 http://localhost:8080/UserRegistration/login.jsp
 ```
 
 ---
 
-## 🔐 Security Notes
-- DB credentials are stored in `db.properties` (gitignored, never committed).
-- Use the provided `db.properties.example` as a reference template.
-- Passwords are currently stored as plain text — use bcrypt hashing for production use.
+## 🔄 Application Flow
+
+```
+Register.jsp  →  RegisterServlet  →  Insert into DB  →  customer.jsp
+                                                               ↓
+Login.jsp     →  LoginServlet     →  Check DB
+                                       ↓           ↓
+                                    ✅ True      ❌ False
+                                       ↓           ↓
+                               customerhome.jsp  Error msg on Login.jsp
+
+Login.jsp  →  ForgetPassword.jsp  →  ForgetPasswordServlet
+                                            ↓
+                                     Update password in DB
+                                            ↓
+                                        Login.jsp ✅
+```
 
 ---
 
-## 📚 Part of the "Code with Puja" DevLog Series
-This project is documented step-by-step in my blog series:
-👉 [Read the DevLog Series](https://pujajorwar.hashnode.dev)
+## 🔐 Security Notes
 
-#Java #Servlets #JSP #PostgreSQL #BuildInPublic
+- DB credentials are stored in `db.properties` (excluded from Git via `.gitignore`).
+- Use `db.properties.example` as the reference template when setting up.
+- Passwords are stored as plain text in this learning project. For production, use **BCrypt hashing**.
+
+---
+
+## 👩‍💻 Author
+
+**Puja Jorwar** — Learning Java Backend Development in public.
+
+- 📖 Blog: [pujajorwar.hashnode.dev](https://pujajorwar.hashnode.dev)
+- 🐙 GitHub: [@Puja-Jorwar](https://github.com/Puja-Jorwar)
+
+---
+
+## 📌 Tags
+`Java` `Servlets` `JSP` `PostgreSQL` `Tomcat` `Maven` `Backend` `BuildInPublic`
